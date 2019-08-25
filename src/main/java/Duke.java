@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,6 +9,7 @@ import static java.nio.CharBuffer.wrap;
 public class Duke {
     protected static List<String> dataList = new ArrayList<String>();
     protected static List<Task> data = new ArrayList<Task>();
+    protected static List<String> savedData = new ArrayList<String>();
     private static String border = "____________________________________________________________";
     private static String logo =
               " ____        _        \n"
@@ -24,8 +26,9 @@ public class Duke {
         System.out.println(border);
         System.out.println("Hello! I'm Duke");
         System.out.println(wrap("What can I do for you?"));
-        System.out.println(border + "\n");
-
+        System.out.println(border);
+        readState();
+        System.out.println(border);
         handleCommand();
     }
 
@@ -86,7 +89,7 @@ public class Duke {
                     if (data.size() > 0) {
                         System.out.println("Here are the tasks in your list:");
                         for (Task task : data) {
-                            System.out.print(idx++ + ".");
+                            System.out.print("    " + idx++ + ".");
                             String before = task.toString().substring(0, 3);
                             String after = task.toString().substring(3);
                             System.out.print(before);
@@ -105,13 +108,13 @@ public class Duke {
                         for (int i = 0; i < data.size(); ++i) {
                             if (i == num) {
                                 if (data.get(i).isDone) {
-                                    System.out.println(border);
-                                    System.out.println(data.get(i).description + " is already done!");
-                                    System.out.println(border);
+                                    System.out.println(data.get(i).toString().substring(3) + " is already done!");
                                     isInsideData = true;
                                     continue;
                                 }
                                 data.get(i).markAsDone();
+                                savedData.set(i, savedData.get(i).replace("✗", "✓"));
+                                saveState();
                                 System.out.println("Nice! I've marked this task as done: ");
                                 System.out.println("    [✓] " + data.get(i).toString().substring(3));
                                 isInsideData = true;
@@ -119,41 +122,22 @@ public class Duke {
                             }
                         }
                         if (!isInsideData) {
-                            System.out.println(border);
                             System.out.println("Task number is out of bounds!");
-                            System.out.println(border);
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Error: Not a valid Task Number!");
                     }
-                } else if (commandType(input) == 1) {
-                    input = input.substring(5);
-                    System.out.println("Got it. I've added this task: ");
-                    data.add(new ToDo(input));
-                    System.out.println("    [T][✗] " + input);
-                    System.out.println("Now you have " + data.size() + " tasks in the list.");
-                } else if (commandType(input) == 2) {
-                    input = input.substring(9);
-                    System.out.println("Got it. I've added this task: ");
-                    StringTokenizer stringTokenizer = new StringTokenizer(input, "/");
-                    String tt1 = stringTokenizer.nextToken();
-                    tt1 = tt1.substring(0, tt1.length()-1);
-                    String tt2 = stringTokenizer.nextToken();
-                    tt2 = tt2.substring(3);
-                    data.add(new Deadline(tt1, tt2));
-                    System.out.println("    [D][✗] " + tt1 + " (by: " + tt2 + ")");
-                    System.out.println("Now you have " + data.size() + " tasks in the list.");
-                } else if (commandType(input) == 3) {
-                    input = input.substring(6);
-                    System.out.println("Got it. I've added this task: ");
-                    StringTokenizer st1 = new StringTokenizer(input, "/");
-                    String tt1 = st1.nextToken();
-                    tt1 = tt1.substring(0, tt1.length()-1);
-                    String tt2 = st1.nextToken();
-                    tt2 = tt2.substring(3);
-                    data.add(new Event(tt1, tt2));
-                    System.out.println("    [E][✗] " + tt1 + " (at: " + tt2 + ")");
-                    System.out.println("Now you have " + data.size() + " tasks in the list.");
+                } else {
+                    if (commandType(input) == 1) {
+                        System.out.println("Got it. I've added this task: ");
+                        runTodo(input, 0);
+                    } else if (commandType(input) == 2) {
+                        System.out.println("Got it. I've added this task: ");
+                        runDeadline(input, 0);
+                    } else if (commandType(input) == 3) {
+                        System.out.println("Got it. I've added this task: ");
+                        runEvent(input, 0);
+                    }
                 }
             } catch (DukeException e) {
                 System.out.println(e.getMessage());
@@ -161,6 +145,46 @@ public class Duke {
             }
             System.out.println(border);
         }
+    }
+    private static void runTodo(String input, int state) {
+        input = input.substring(5);
+        Task tempTask = new ToDo(input);
+        if (state == 2)
+            tempTask.markAsDone();
+        data.add(tempTask);
+        writeData(tempTask, null);
+        System.out.println("    [T][" + tempTask.getStatusIcon() + "] " + input);
+        System.out.println("Now you have " + data.size() + " tasks in the list.");
+    }
+    private static void runDeadline(String input, int state) {
+        input = input.substring(9);
+        StringTokenizer stringTokenizer = new StringTokenizer(input, "/");
+        String tt1 = stringTokenizer.nextToken();
+        tt1 = tt1.substring(0, tt1.length()-1);
+        String tt2 = stringTokenizer.nextToken();
+        tt2 = tt2.substring(3);
+        Task tempTask = new Deadline(tt1, tt2);
+        if (state == 2)
+            tempTask.markAsDone();
+        data.add(tempTask);
+        writeData(tempTask, tt2);
+        System.out.println("    [D][" + tempTask.getStatusIcon() + "] " + tt1 + " (by: " + tt2 + ")");
+        System.out.println("Now you have " + data.size() + " tasks in the list.");
+    }
+    private static void runEvent(String input, int state) {
+        input = input.substring(6);
+        StringTokenizer st1 = new StringTokenizer(input, "/");
+        String tt1 = st1.nextToken();
+        tt1 = tt1.substring(0, tt1.length()-1);
+        String tt2 = st1.nextToken();
+        tt2 = tt2.substring(3);
+        Task tempTask = new Event(tt1, tt2);
+        if (state == 2)
+            tempTask.markAsDone();
+        data.add(tempTask);
+        writeData(tempTask, tt2);
+        System.out.println("    [E][" + tempTask.getStatusIcon() + "] " + tt1 + " (at: " + tt2 + ")");
+        System.out.println("Now you have " + data.size() + " tasks in the list.");
     }
 
     private static int commandType(String str) throws DukeException{
@@ -178,6 +202,115 @@ public class Duke {
             return 2;
         } else {
             throw new DukeException("     ☹ OOPS!!! I'm sorry, but I don't know what that means :-( || Unknown COMMAND TYPE");
+        }
+    }
+
+    private static void writeData(Task task, String extra) {
+        String st1, st2, st3, st4 = null;
+        st1 = task.toString().substring(1, 2);
+        if (st1.equals("D") || st1.equals("E")) {
+            st4 = extra;
+        }
+        st2 = task.getStatusIcon();
+        st3 = task.toString().substring(3);
+        if (extra != null && st3.contains(extra)) {
+            st3 = st3.replace(extra, "");
+            st3 = st3.substring(0, st3.length() - 7);
+        }
+        String finalStr = st1 + "|" + st2 + "|" + st3;
+        if (st4 != null) {
+            finalStr += "|" + st4;
+        }
+        savedData.add(finalStr);
+        saveState();
+    }
+
+    private static void saveState() {
+        try {
+            PrintWriter out = new PrintWriter("./data/saved_data.txt");
+            for (String str : savedData) {
+                out.println(str);
+            }
+            out.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void readState() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("./data/saved_data.txt"));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                StringTokenizer stringTokenizer = new StringTokenizer(line, "|");
+                int count = 1;
+                String finalOutput = "";
+                String currStr;
+                Boolean isChecked = false;
+                int cmdState = 0;
+
+                while (stringTokenizer.hasMoreTokens()) {
+                    currStr = stringTokenizer.nextToken();
+                    if (count == 1) {
+                        switch (currStr) {
+                            case "T":
+                                finalOutput = "todo ";
+                                cmdState = 1;
+                                break;
+                            case "D":
+                                finalOutput = "deadline ";
+                                cmdState = 2;
+                                break;
+                            case "E":
+                                finalOutput = "event ";
+                                cmdState = 3;
+                                break;
+                        }
+                    } else if (count == 2) {
+                        if (currStr.equals("✓")) {
+                            isChecked = true;
+                        }
+                    } else if (count == 3) {
+                        finalOutput += currStr;
+                    } else if (count == 4) {
+                        switch (cmdState) {
+                            case 2:
+                                finalOutput += " /by " + currStr;
+                                break;
+                            case 3:
+                                finalOutput += " /at " + currStr;
+                                break;
+                        }
+                    }
+                    count++;
+                }
+                switch (cmdState) {
+                    case 1:
+                        if (!isChecked)
+                            runTodo(finalOutput, 1);
+                        else
+                            runTodo(finalOutput, 2);
+                        break;
+                    case 2:
+                        if (!isChecked)
+                            runDeadline(finalOutput, 1);
+                        else
+                            runDeadline(finalOutput, 2);
+                        break;
+                    case 3:
+                        if (!isChecked)
+                            runEvent(finalOutput, 1);
+                        else
+                            runEvent(finalOutput, 2);
+                        break;
+                }
+            }
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+            System.out.println("No saved files detected.");
+        } catch (IOException e) {
+            System.out.println("BALLS");
         }
     }
 }
