@@ -9,7 +9,7 @@ public class Task {
 
     //"\u2713" : "\u2718"
     public String getStatusIcon() {
-        return (isDone ? "V" : "X"); //return tick or X symbols
+        return (isDone ? "✓" : "✗"); //return tick or X symbols
     }
 
     public void markAsDone() {
