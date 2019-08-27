@@ -1,8 +1,7 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static java.nio.CharBuffer.wrap;
 
@@ -22,7 +21,7 @@ public class Duke {
     /**
      * Program starts here.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DukeException {
         System.out.println(border);
         System.out.println("Hello! I'm Duke");
         System.out.println(wrap("What can I do for you?"));
@@ -99,7 +98,7 @@ public class Duke {
                     } else {
                         System.out.println("Empty List!");
                     }
-                } else if (input.contains("done")) {
+                } else if (input.length() >= 5 && input.substring(0, 4).equals("done")) {
                     input = input.substring(5);
                     try {
                         int num = Integer.parseInt(input);
@@ -125,17 +124,15 @@ public class Duke {
                             System.out.println("Task number is out of bounds!");
                         }
                     } catch (NumberFormatException e) {
-                        System.out.println("Error: Not a valid Task Number!");
+                        throw new DukeException("Not a valid Task Number!");
+                        //System.out.println("Error: Not a valid Task Number!");
                     }
                 } else {
                     if (commandType(input) == 1) {
-                        System.out.println("Got it. I've added this task: ");
                         runTodo(input, 0);
                     } else if (commandType(input) == 2) {
-                        System.out.println("Got it. I've added this task: ");
                         runDeadline(input, 0);
                     } else if (commandType(input) == 3) {
-                        System.out.println("Got it. I've added this task: ");
                         runEvent(input, 0);
                     }
                 }
@@ -153,38 +150,50 @@ public class Duke {
             tempTask.markAsDone();
         data.add(tempTask);
         writeData(tempTask, null);
-        System.out.println("    [T][" + tempTask.getStatusIcon() + "] " + input);
-        System.out.println("Now you have " + data.size() + " tasks in the list.");
+        if (state == 0) {
+            System.out.println("Got it. I've added this task: ");
+            System.out.println("    [T][" + tempTask.getStatusIcon() + "] " + input);
+            System.out.println("Now you have " + data.size() + " tasks in the list.");
+        }
     }
-    private static void runDeadline(String input, int state) {
+    private static void runDeadline(String input, int state) throws DukeException {
         input = input.substring(9);
-        StringTokenizer stringTokenizer = new StringTokenizer(input, "/");
-        String tt1 = stringTokenizer.nextToken();
-        tt1 = tt1.substring(0, tt1.length()-1);
-        String tt2 = stringTokenizer.nextToken();
-        tt2 = tt2.substring(3);
+        int startOfBy = input.indexOf("/");
+        String tt1 = input.substring(0, startOfBy - 1);
+        //System.out.println(tt1);
+        String tt2 = input.substring(startOfBy + 4);
+        //System.out.println(tt2);
         Task tempTask = new Deadline(tt1, tt2);
         if (state == 2)
             tempTask.markAsDone();
         data.add(tempTask);
+        //System.out.println(tempTask.getDateTime());
         writeData(tempTask, tt2);
-        System.out.println("    [D][" + tempTask.getStatusIcon() + "] " + tt1 + " (by: " + tt2 + ")");
-        System.out.println("Now you have " + data.size() + " tasks in the list.");
+        if (state == 0) {
+            System.out.println("Got it. I've added this task: ");
+            System.out.println("    [D][" + tempTask.getStatusIcon() + "] " + tt1 + " (by: " + tt2 + ")");
+            System.out.println("Now you have " + data.size() + " tasks in the list.");
+        }
     }
-    private static void runEvent(String input, int state) {
+    private static void runEvent(String input, int state) throws DukeException {
         input = input.substring(6);
-        StringTokenizer st1 = new StringTokenizer(input, "/");
-        String tt1 = st1.nextToken();
-        tt1 = tt1.substring(0, tt1.length()-1);
-        String tt2 = st1.nextToken();
-        tt2 = tt2.substring(3);
+        //StringTokenizer st1 = new StringTokenizer(input, "/at ");
+        int startOfAt = input.indexOf("/");
+        String tt1 = input.substring(0, startOfAt - 1);
+        //System.out.println(tt1);
+        String tt2 = input.substring(startOfAt + 4);
+        //System.out.println(tt2);
         Task tempTask = new Event(tt1, tt2);
         if (state == 2)
             tempTask.markAsDone();
         data.add(tempTask);
+        //System.out.println(tempTask.getDateTime());
         writeData(tempTask, tt2);
-        System.out.println("    [E][" + tempTask.getStatusIcon() + "] " + tt1 + " (at: " + tt2 + ")");
-        System.out.println("Now you have " + data.size() + " tasks in the list.");
+        if (state == 0) {
+            System.out.println("Got it. I've added this task: ");
+            System.out.println("    [E][" + tempTask.getStatusIcon() + "] " + tt1 + " (at: " + tt2 + ")");
+            System.out.println("Now you have " + data.size() + " tasks in the list.");
+        }
     }
 
     private static int commandType(String str) throws DukeException{
@@ -237,7 +246,7 @@ public class Duke {
         }
     }
 
-    private static void readState() {
+    private static void readState() throws DukeException {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("./data/saved_data.txt"));
             String line = "";
