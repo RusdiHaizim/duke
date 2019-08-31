@@ -6,7 +6,7 @@ import java.util.*;
 import static java.nio.CharBuffer.wrap;
 
 public class Duke {
-    protected static List<String> dataList = new ArrayList<String>();
+    //protected static List<String> dataList = new ArrayList<String>();
     protected static List<Task> data = new ArrayList<Task>();
     protected static List<String> savedData = new ArrayList<String>();
     private static String border = "____________________________________________________________";
@@ -38,6 +38,7 @@ public class Duke {
         processReq(sc);
     }
 
+    /*
     private static void level_1(Scanner sc) {
         while (sc.hasNext()) {
             input = sc.nextLine();
@@ -49,7 +50,9 @@ public class Duke {
             }
         }
     }
+     */
 
+    /*
     private static void level_2(Scanner sc) {
         while (sc.hasNext()) {
             input = sc.nextLine();
@@ -74,12 +77,14 @@ public class Duke {
             }
         }
     }
+     */
 
     private static void processReq(Scanner sc) {
         while (sc.hasNext()) {
             input = sc.nextLine();
             try {
                 System.out.println(border);
+                boolean isInsideData;
                 if (input.equals("bye")) {
                     System.out.println(wrap("\nBye. Hope to see you again soon!\n"));
                     break;
@@ -103,7 +108,7 @@ public class Duke {
                     try {
                         int num = Integer.parseInt(input);
                         --num;
-                        boolean isInsideData = false;
+                        isInsideData = false;
                         for (int i = 0; i < data.size(); ++i) {
                             if (i == num) {
                                 if (data.get(i).isDone) {
@@ -121,11 +126,35 @@ public class Duke {
                             }
                         }
                         if (!isInsideData) {
-                            System.out.println("Task number is out of bounds!");
+                            System.out.println("Task number is out of bounds! [Done]");
                         }
                     } catch (NumberFormatException e) {
                         throw new DukeException("Not a valid Task Number!");
                         //System.out.println("Error: Not a valid Task Number!");
+                    }
+                } else if (input.length() > 6 && input.substring(0,6).equals("delete")) {
+                    input = input.substring(7);
+                    try {
+                        int num = Integer.parseInt(input);
+                        --num;
+                        for (int i = 0; i < data.size(); ++i) {
+                            if (i == num) {
+                                System.out.println("Noted. I've removed this task: ");
+
+                                System.out.print("  " + data.get(i).toString().substring(0, 3));
+                                System.out.print("[" + data.get(i).getStatusIcon() + "] ");
+                                System.out.println(data.get(i).toString().substring(3));
+
+                                data.remove(i);
+                                savedData.remove(i);
+                                saveState();
+
+                                System.out.println("Now you have " + data.size() + " tasks in the list.");
+                                break;
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        throw new DukeException("Task number is out of bounds or invalid! [Delete]");
                     }
                 } else {
                     if (commandType(input) == 1) {
