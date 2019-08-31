@@ -98,7 +98,7 @@ public class Duke {
                     } else {
                         System.out.println("Empty List!");
                     }
-                } else if (input.length() >= 5 && input.substring(0, 4).equals("done")) {
+                } else if (input.length() > 4 && input.substring(0, 4).equals("done")) {
                     input = input.substring(5);
                     try {
                         int num = Integer.parseInt(input);
