@@ -98,7 +98,23 @@ public class Duke {
                     } else {
                         System.out.println("Empty List!");
                     }
-                } else if (input.length() >= 5 && input.substring(0, 4).equals("done")) {
+                } else if (input.length() > 4 && input.substring(0, 4).equals("find")) {
+                    input = input.substring(5);
+                    if (data.size() > 0) {
+                        System.out.println("Here are the matching tasks in your list:");
+                        for (int i = 0; i < data.size(); ++i) {
+                            if (data.get(i).toString().contains(input)) {
+                                int temp = i + 1;
+                                System.out.print(temp + ".");
+                                System.out.print(data.get(i).toString().substring(0,3));
+                                System.out.print("[" + data.get(i).getStatusIcon() + "] ");
+                                System.out.println(data.get(i).toString().substring(3));
+                            }
+                        }
+                    } else {
+                        System.out.println("Empty List! Nothing to find.");
+                    }
+                } else if (input.length() > 4 && input.substring(0, 4).equals("done")) {
                     input = input.substring(5);
                     try {
                         int num = Integer.parseInt(input);
