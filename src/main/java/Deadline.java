@@ -3,10 +3,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Deadline extends Task {
-    protected String by;
-    protected Date dateNow;
+    private String by;
+    private Date dateNow;
 
-    public Deadline(String description, String by) throws DukeException {
+    Deadline(String description, String by) {
         super(description);
         this.by = by;
 
@@ -15,7 +15,7 @@ public class Deadline extends Task {
         try {
             dateNow = sdf.parse(by);
         } catch (ParseException e) {
-            throw new DukeException("Task does not have dd/MM/yyyy HHmm date-time format!");
+            //throw new DukeException("Task does not have dd/MM/yyyy HHmm date-time format!");
         }
     }
 
@@ -27,6 +27,11 @@ public class Deadline extends Task {
     @Override
     public String getDateTime() {
         return dateNow.toString();
+    }
+
+    @Override
+    public String getExtra() {
+        return this.by;
     }
 
 }

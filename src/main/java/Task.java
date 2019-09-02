@@ -19,4 +19,8 @@ public class Task {
     public String getDateTime() {
         return null;
     }
+
+    public String getExtra() {
+        return null;
+    }
 }
