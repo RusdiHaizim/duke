@@ -1,11 +1,15 @@
+package Duke;
+
+import Duke.Tasks.Task;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-class Storage {
+public class Storage {
     private static ArrayList<Task> data = new ArrayList<>();
 
-    Storage (String filepath) throws DukeException {
+    public Storage (String filepath) throws DukeException {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filepath));
             String line;
@@ -55,21 +59,21 @@ class Storage {
                 switch (cmdState) {
                     case 1:
                         if (!isChecked)
-                            Command.runTodo(data, finalOutput.toString(), 1);
+                            Parser.runTodo(data, finalOutput.toString(), 1);
                         else
-                            Command.runTodo(data, finalOutput.toString(), 2);
+                            Parser.runTodo(data, finalOutput.toString(), 2);
                         break;
                     case 2:
                         if (!isChecked)
-                            Command.runDeadline(data, finalOutput.toString(), 1);
+                            Parser.runDeadline(data, finalOutput.toString(), 1);
                         else
-                            Command.runDeadline(data, finalOutput.toString(), 2);
+                            Parser.runDeadline(data, finalOutput.toString(), 2);
                         break;
                     case 3:
                         if (!isChecked)
-                            Command.runEvent(data, finalOutput.toString(), 1);
+                            Parser.runEvent(data, finalOutput.toString(), 1);
                         else
-                            Command.runEvent(data, finalOutput.toString(), 2);
+                            Parser.runEvent(data, finalOutput.toString(), 2);
                         break;
                 }
             }
@@ -82,11 +86,11 @@ class Storage {
     }
 
 
-    ArrayList<Task> load() {
+    public ArrayList<Task> load() {
         return data;
     }
 
-    void write(ArrayList<Task> tasks) throws DukeException {
+    public void write(ArrayList<Task> tasks) throws DukeException {
         try {
             PrintWriter out = new PrintWriter("./data/saved_data.txt");
             for (Task task : tasks) {

@@ -1,13 +1,15 @@
+package Duke;
+
 import java.util.Scanner;
 
-class Ui {
+public class Ui {
     private static String border = "____________________________________________________________";
 
-    Ui () {
+    public Ui () {
 
     }
 
-    void showWelcome() {
+    public void showWelcome() {
         System.out.println(border);
         System.out.println("Hello! I'm Duke");
         String logo = " ____        _        \n"
@@ -17,26 +19,27 @@ class Ui {
                 + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println(logo);
         System.out.println("What can I do for you?");
-    }
-
-    void showLine() {
         System.out.println(border);
     }
 
-    String readCommand() {
+    public void showLine() {
+        System.out.println(border);
+    }
+
+    public String readCommand() {
         Scanner sc = new Scanner(System.in);
         return sc.nextLine();
     }
 
-    void showLoadingError() {
+    public void showLoadingError() {
         System.out.println("No saved files detected.");
     }
 
-    void showError(String e) {
+    public void showError(String e) {
         System.out.println(e);
     }
 
-    void showMessage(String m) {
+    public void showMessage(String m) {
         System.out.println(m);
     }
 }

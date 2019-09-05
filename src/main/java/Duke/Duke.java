@@ -1,3 +1,7 @@
+package Duke;
+
+import Duke.Commands.Command;
+
 public class Duke {
     private static Ui ui;
     private static Storage storage;

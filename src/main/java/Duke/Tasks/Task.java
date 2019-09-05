@@ -1,6 +1,9 @@
-public class Task {
-    protected String description;
-    protected boolean isDone;
+package Duke.Tasks;
+
+
+public abstract class Task {
+    String description;
+    private boolean isDone;
 
     public Task(String description) {
         this.description = description;
@@ -10,6 +13,10 @@ public class Task {
     //"\u2713" : "\u2718"
     public String getStatusIcon() {
         return (isDone ? "✓" : "✗"); //return tick or X symbols
+    }
+
+    public boolean isDone() {
+        return isDone;
     }
 
     public void markAsDone() {

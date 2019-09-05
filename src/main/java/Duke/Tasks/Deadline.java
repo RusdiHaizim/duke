@@ -1,3 +1,5 @@
+package Duke.Tasks;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -6,7 +8,7 @@ public class Deadline extends Task {
     private String by;
     private Date dateNow;
 
-    Deadline(String description, String by) {
+    public Deadline(String description, String by) {
         super(description);
         this.by = by;
 
@@ -15,7 +17,7 @@ public class Deadline extends Task {
         try {
             dateNow = sdf.parse(by);
         } catch (ParseException e) {
-            //throw new DukeException("Task does not have dd/MM/yyyy HHmm date-time format!");
+            //throw new DukeException("Tasks.Task does not have dd/MM/yyyy HHmm date-time format!");
         }
     }
 
