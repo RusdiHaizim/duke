@@ -11,6 +11,13 @@ public class DoneCommand extends Command {
         input = str;
     }
 
+    /**
+     * Execute checking of task in tasks
+     * @param tasks TaskList containing current tasks
+     * @param ui the Ui responsible for outputting messages
+     * @param storage Storage needed to write the updated data
+     * @throws DukeException Shows error when task number is invalid
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
         input = input.substring(5);

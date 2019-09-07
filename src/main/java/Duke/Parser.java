@@ -9,6 +9,14 @@ import Duke.Tasks.ToDo;
 import java.util.ArrayList;
 
 public class Parser{
+    /**
+     * Allows the user input to be parsed before running 'execute'
+     * @param input String inputted by user, which needs to be parsed
+     *              to identify the intent
+     * @return a subclass of the Command Class along
+     *         with their respective intent
+     * @throws DukeException Shows error when unknown command is inputted
+     */
     public static Command parse(String input) throws DukeException {
         if (input.equals("bye")) {
             return new ExitCommand();
@@ -29,8 +37,19 @@ public class Parser{
         } else {
             throw new DukeException("     ☹ OOPS!!! I'm sorry, but I don't know what that means :-( [Unknown COMMAND TYPE]");
         }
-
     }
+
+    /**
+     * Creates a new 'toBeDone' task, before adding it to current list,
+     * then returning the output by Duke
+     * @param data ArrayList of Tasks that's currently being stored
+     * @param input Command input by user
+     * @param state The type of output needed:
+     *              0 : Needs to return a string
+     *              1 : Returns null string with unchecked task
+     *              2 : Returns null string with checked task
+     * @return String which highlights what Duke processed
+     */
     public static String runTodo(ArrayList<Task> data, String input, int state) {
         StringBuilder stringBuilder = new StringBuilder();
         input = input.substring(5);
@@ -45,6 +64,18 @@ public class Parser{
         }
         return stringBuilder.toString();
     }
+
+    /**
+     * Creates a new 'Deadline' task, before adding it to current list,
+     * then returning the output by Duke
+     * @param data ArrayList of Tasks that's currently being stored
+     * @param input Command input by user
+     * @param state The type of output needed:
+     *              0 : Needs to return a string
+     *              1 : Returns null string with unchecked task
+     *              2 : Returns null string with checked task
+     * @return String which highlights what Duke processed
+     */
     public static String runDeadline(ArrayList<Task> data, String input, int state) {
         StringBuilder stringBuilder = new StringBuilder();
         input = input.substring(9);
@@ -62,6 +93,18 @@ public class Parser{
         }
         return stringBuilder.toString();
     }
+
+    /**
+     * Creates a new 'Event' task, before adding it to current list,
+     * then returning the output by Duke
+     * @param data ArrayList of Tasks that's currently being stored
+     * @param input Command input by user
+     * @param state The type of output needed:
+     *              0 : Needs to return a string
+     *              1 : Returns null string with unchecked task
+     *              2 : Returns null string with checked task
+     * @return String which highlights what Duke processed
+     */
     public static String runEvent(ArrayList<Task> data, String input, int state) {
         StringBuilder stringBuilder = new StringBuilder();
         input = input.substring(6);

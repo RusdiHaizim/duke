@@ -9,6 +9,12 @@ import java.util.StringTokenizer;
 public class Storage {
     private static ArrayList<Task> data = new ArrayList<>();
 
+    /**
+     * Initialises the 'data' based on previous data
+     * from filepath
+     * @param filepath The storage path of the saved data
+     * @throws DukeException
+     */
     public Storage (String filepath) throws DukeException {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filepath));
@@ -85,11 +91,20 @@ public class Storage {
         }
     }
 
-
+    /**
+     * Loads the currently initialised ArrayList of Tasks
+     * @return ArrayList of Tasks that has been initialised
+     */
     public ArrayList<Task> load() {
         return data;
     }
 
+    /**
+     * Writes current taskList onto the save file
+     * @param tasks ArrayList of Tasks needing to be written
+     *              onto the save file
+     * @throws DukeException
+     */
     public void write(ArrayList<Task> tasks) throws DukeException {
         try {
             PrintWriter out = new PrintWriter("./data/saved_data.txt");

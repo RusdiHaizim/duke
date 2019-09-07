@@ -11,6 +11,13 @@ public class FindCommand extends Command {
         input = str;
     }
 
+    /**
+     * Executes finding tasks corresponding to the keyword in 'input'
+     * @param tasks TaskList containing current tasks
+     * @param ui the Ui responsible for outputting messages
+     * @param storage Storage needed to write the updated data
+     * @throws DukeException Shows error when unable to access list
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
         input = input.substring(5);

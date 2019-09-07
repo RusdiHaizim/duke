@@ -8,6 +8,12 @@ public class Event extends Task {
     private String at;
     private Date dateNow;
 
+    /**
+     * Initialises the description of the task
+     * @param description String containing description
+     *                    of the task inputted by user
+     * @param at The details of when task is to be done
+     */
     public Event(String description, String at) {
         super(description);
         this.at = at;
@@ -21,16 +27,31 @@ public class Event extends Task {
         }
     }
 
+    /**
+     * Gets the task type in [] format and
+     * its description
+     * @return String containing type and description
+     */
     @Override
     public String toString() {
         return "[E]" + description + " (at: " + at + ")";
     }
 
+    /**
+     * Method to get date of task if possible
+     * @return String containing the date of Task
+     */
     @Override
     public String getDateTime() {
         return dateNow.toString();
     }
 
+    /**
+     * Method to get details of extra details
+     * concerning the task
+     * @return String containing details of when task
+     *         is to be done at
+     */
     @Override
     public String getExtra() {
         return this.at;

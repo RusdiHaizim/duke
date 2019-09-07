@@ -8,6 +8,9 @@ public class Duke {
     private static Storage storage;
     private static TaskList tasks;
 
+    /**
+     * Constructor for main class to initialise the settings
+     */
     private Duke(String filePath) {
         ui = new Ui();
         try {
@@ -19,6 +22,9 @@ public class Duke {
         }
     }
 
+    /**
+     * Run the rest of the code here
+     */
     private void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -38,7 +44,7 @@ public class Duke {
     }
 
     /**
-     * Program starts here.
+     * Program Start!
      */
     public static void main(String[] args) {
         new Duke(savedDataPath).run();
