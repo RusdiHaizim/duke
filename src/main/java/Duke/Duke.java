@@ -3,6 +3,7 @@ package Duke;
 import Duke.Commands.Command;
 
 public class Duke {
+    private static String savedDataPath = "./data/saved_data.txt";
     private static Ui ui;
     private static Storage storage;
     private static TaskList tasks;
@@ -40,7 +41,7 @@ public class Duke {
      * Program starts here.
      */
     public static void main(String[] args) {
-        new Duke("./data/saved_data.txt").run();
+        new Duke(savedDataPath).run();
     }
 
 }

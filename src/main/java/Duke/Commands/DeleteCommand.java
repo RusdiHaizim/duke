@@ -18,16 +18,16 @@ public class DeleteCommand extends Command {
             int num = Integer.parseInt(input);
             --num;
             boolean isWithinData = false;
-            for (int i = 0; i < tasks.data.size(); ++i) {
+            for (int i = 0; i < tasks.size(); ++i) {
                 if (i == num) {
                     String stringBuilder = "Noted. I've removed this task: " + "\n" +
-                            "  " + tasks.data.get(i).toString().substring(0, 3) +
-                            "[" + tasks.data.get(i).getStatusIcon() + "] " +
-                            tasks.data.get(i).toString().substring(3);
-                    tasks.data.remove(i);
-                    storage.write(tasks.data);
+                            "  " + tasks.get(i).toString().substring(0, 3) +
+                            "[" + tasks.get(i).getStatusIcon() + "] " +
+                            tasks.get(i).toString().substring(3);
+                    tasks.remove(i);
+                    storage.write(tasks.getData());
                     ui.showMessage(stringBuilder);
-                    ui.showMessage("Now you have " + tasks.data.size() + " tasks in the list.");
+                    ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
                     isWithinData = true;
                     break;
                 }

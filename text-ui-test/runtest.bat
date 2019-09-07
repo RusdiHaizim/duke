@@ -9,7 +9,7 @@ if exist ACTUAL.TXT del ACTUAL.TXT
 
 REM compile the code into the bin folder
 echo starting compile
-javac  -cp ..\src\main\java -Xlint:none -d ..\bin ..\src\main\java\Duke.java
+javac  -cp ..\src\main\java -Xlint:none -d ..\bin ..\src\main\java\Duke\Duke.java
 echo finish compiling
 IF ERRORLEVEL 1 (
     echo ********** BUILD FAILURE **********

@@ -23,7 +23,7 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + this.description + " (at: " + at + ")";
+        return "[E]" + description + " (at: " + at + ")";
     }
 
     @Override

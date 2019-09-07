@@ -29,16 +29,16 @@ public class AddCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
         switch (type) {
             case TODO:
-                ui.showMessage(Parser.runTodo(tasks.data, input, 0));
-                storage.write(tasks.data);
+                ui.showMessage(Parser.runTodo(tasks.getData(), input, 0));
+                storage.write(tasks.getData());
                 break;
             case DEADLINE:
-                ui.showMessage(Parser.runDeadline(tasks.data, input, 0));
-                storage.write(tasks.data);
+                ui.showMessage(Parser.runDeadline(tasks.getData(), input, 0));
+                storage.write(tasks.getData());
                 break;
             case EVENT:
-                ui.showMessage(Parser.runEvent(tasks.data, input, 0));
-                storage.write(tasks.data);
+                ui.showMessage(Parser.runEvent(tasks.getData(), input, 0));
+                storage.write(tasks.getData());
                 break;
             default:
                 throw new DukeException("     [Unknown COMMAND TYPE]");

@@ -13,9 +13,9 @@ public class ListCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         int idx = 1;
-        if (tasks.data.size() > 0) {
+        if (tasks.size() > 0) {
             ui.showMessage("Here are the tasks in your list:");
-            for (Task task : tasks.data) {
+            for (Task task : tasks.getData()) {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("    ").append(idx++).append(".");
                 String before = task.toString().substring(0, 3);

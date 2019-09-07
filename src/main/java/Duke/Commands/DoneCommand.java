@@ -18,17 +18,17 @@ public class DoneCommand extends Command {
             int num = Integer.parseInt(input);
             --num;
             boolean isInsideData = false;
-            for (int i = 0; i < tasks.data.size(); ++i) {
+            for (int i = 0; i < tasks.size(); ++i) {
                 if (i == num) {
-                    if (tasks.data.get(i).isDone()) {
-                        ui.showMessage(tasks.data.get(i).toString().substring(3) + " is already done!");
+                    if (tasks.get(i).isDone()) {
+                        ui.showMessage(tasks.get(i).toString().substring(3) + " is already done!");
                         isInsideData = true;
                         continue;
                     }
-                    tasks.data.get(i).markAsDone();
-                    storage.write(tasks.data);
+                    tasks.get(i).markAsDone();
+                    storage.write(tasks.getData());
                     ui.showMessage("Nice! I've marked this task as done: ");
-                    ui.showMessage("    [✓] " + tasks.data.get(i).toString().substring(3));
+                    ui.showMessage("    [✓] " + tasks.get(i).toString().substring(3));
                     isInsideData = true;
                     break;
                 }
